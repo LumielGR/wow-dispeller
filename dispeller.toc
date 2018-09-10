@@ -1,0 +1,7 @@
+## Interface: 80000
+## Title: Dispeller
+## Author: Sofianos (Magtheridon-EU)
+## Version: 0.1a
+## SavedVariables: DispellerSettings
+
+dispeller.xml
