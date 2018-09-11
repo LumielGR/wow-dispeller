@@ -4,4 +4,4 @@
 ## Version: 0.1a
 ## SavedVariables: DispellerSettings
 
-dispeller.xml
+Dispeller.xml
