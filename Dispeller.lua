@@ -16,12 +16,13 @@ function Dispeller(self)
     self:Show()
     SLASH_DISPELLER1 = "/dispeller"
     SlashCmdList["DISPELLER"] = Dispeller_cmdHandle
+    DispellerTitle.Text:SetText("Dispeller v" .. version)
 end
 
 function Dispeller_handleEvent(self, event, ...)
     local args = {...}
     if (event == "UNIT_AURA") then
-        if (args[1] == "player" and DispellerSettings.Debug == false) then do return end end
+        if (args[1] ~= "target" and DispellerSettings.Debug == false) then do return end end
         logdebug(event .. " on " .. args[1])
         local stealable = {}
         for i = 1,40 do
@@ -34,7 +35,7 @@ function Dispeller_handleEvent(self, event, ...)
             end
         end
         if (DispellerSettings.Debug) then
-            stealable = {"Buff", "Aura", "Spell" }
+            stealable = {"Buff1", "Buff2", "Buff3", "Buff4", "Buff5", "Buff6", "Buff7", "Buff8", "Buff9" }
         end
 
         if (#stealable < 1) then
@@ -42,18 +43,21 @@ function Dispeller_handleEvent(self, event, ...)
                 self:Hide()
             end
         else
-            local height = 10* #stealable
+            local height = 20 * #stealable
             stealable = table.concat(stealable, "\n")
+--            DispellerBuffs:SetHeight(height)
+            DispellerBuffs.Text:SetText(stealable)
+            self:SetHeight(height)
             DispellerBuffs:SetHeight(height)
-            DispellerBuffs.DisplayText:SetText(stealable)
-            DispellerBuffs:Show()
+--            DispellerBuffs:ClearAllPoints()
+--            DispellerBuffs:SetPoint("BOTTOMLEFT", 0, -22)
+--            DispellerBuffs:Show()
             self:Show()
         end
     elseif (event == "ADDON_LOADED") then
         if (args[1] == "Dispeller") then
             if (type(DispellerSettings) ~= "table") then
                 DispellerSettings =  {
-                    Debug = false,
                     positionX = 0,
                     positionY = 0
                 } end
@@ -62,29 +66,21 @@ function Dispeller_handleEvent(self, event, ...)
             self:ClearAllPoints()
             self:SetPoint("CENTER", 0, 0)
             self:SetPoint("BOTTOMLEFT", DispellerSettings.positionX, DispellerSettings.positionY)
+            DispellerSettings.Debug = false
         end
     end
 end
 
 function Dispeller_mouseDown(self, button)
     if (button == "MiddleButton") then
---        TODO REMOVE
---        self.Debug = not self.Debug
-        DispellerSettings.Debug = not DispellerSettings.Debug
-        if (DispellerSettings.Debug) then
-            DispellerBuffs.DisplayText:SetText("")
-        else
-            loginfo(button)
-            loginfo("Debug: " .. tostring(DispellerSettings.Debug))
-            loginfo("Locked: " .. tostring(self.Locked))
-        end
+        self.Locked = not self.Locked
+        loginfo("Locked: " .. tostring(self.Locked))
     end
-    logdebug(button)
-    logdebug("Debug: " .. tostring(DispellerSettings.Debug))
-    logdebug("Locked: " .. tostring(self.Locked))
-    if (self.Locked == false) then
-        self:StartMoving()
-        self.IsMoving = true
+    if (button == "LeftButton") then
+        if (self.Locked == false) then
+            self:StartMoving()
+            self.IsMoving = true
+        end
     end
 end
 
@@ -102,5 +98,9 @@ end
 function Dispeller_cmdHandle(command, ...)
     if (command == "debug") then
         DispellerSettings.Debug = not DispellerSettings.Debug
+        loginfo("Debug: " .. tostring(DispellerSettings.Debug))
+        if (DispellerSettings.Debug) then
+            DispellerBuffs.Text:SetText("")
+        end
     end
 end
