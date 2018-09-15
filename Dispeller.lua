@@ -31,11 +31,7 @@ function Dispeller_handleEvent(self, event, ...)
             if (type(DispellerSettings) ~= "table") then
                 DispellerSettings =  { }
             end
-
-            -- self:ClearAllPoints()
-            -- self:SetPoint("CENTER", 0, 0)
-            -- self:SetPoint("BOTTOMLEFT", DispellerSettings.positionX, DispellerSettings.positionY)
-            DispellerSettings.Debug = true
+            DispellerSettings.Debug = false
         end
     elseif (event == "PLAYER_TARGET_CHANGED")  then
         Dispeller_Update()
@@ -72,12 +68,8 @@ function Dispeller_Update()
     else
         local height = 12 * #stealable
         stealable = table.concat(stealable, "\n")
-        --            DispellerBuffs:SetHeight(height)
         DispellerBuffs.Text:SetText(stealable)
---        DispellerFrame:SetHeight(height)
-        DispellerBuffs:SetHeight(height)
---        DispellerBuffs:ClearAllPoints()
---        DispellerBuffs:SetPoint("BOTTOMLEFT", 0, -22)
+        DispellerBuffs:SetHeight(height + 50)
         DispellerBuffs:Show()
         DispellerFrame:Show()
     end

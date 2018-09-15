@@ -48,24 +48,10 @@
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <Texture>
-                            <Anchors>
-                                <Anchor point="TOPLEFT">
-                                    <Offset><AbsDimension x="25" y="-25"/></Offset>
-                                </Anchor>
-                            </Anchors>
-                            <Gradient>
-                                <MinColor r="1" g="0" b="0" a="0.1"/>
-                                <MaxColor r="1" g="0" b="0" a="1.0"/>
-                            </Gradient>
-                            <!--<Color r="1" g="0" b="0" a="0.5"/>-->
-                        </Texture>
-                    </Layer>
-                    <Layer level="OVERLAY">
                         <FontString parentKey="Text" font="Fonts\FRIZQT__.TTF" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="TOPLEFT">
-                                    <Offset><AbsDimension x="25" y="-25"/></Offset>
+                                    <Offset><AbsDimension x="25" y="-5"/></Offset>
                                 </Anchor>
                                 <Anchor point="BOTTOMRIGHT"/>
                             </Anchors>
@@ -73,11 +59,11 @@
                         </FontString>
                     </Layer>
                 </Layers>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"
                           edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <Color r="1" g="0" b="0"/>
                     <BackgroundInsets>
-                        <!--<AbsInset left="11" right="12" top="12" bottom="11"/>-->
-                        <AbsInset left="0" right="220" top="12" bottom="11"/>
+                        <AbsInset left="11" right="12" top="12" bottom="11"/>
                     </BackgroundInsets>
                     <TileSize>
                         <AbsValue val="32"/>
@@ -88,10 +74,6 @@
                 </Backdrop>
             </Frame>
         </Frames>
-        <!--<Backdrop>-->
-            <!--<Color r="0" g="1" b="1" a="1.0" />-->
-        <!--</Backdrop>-->
-        <!---->
         <Scripts>
             <OnLoad>Dispeller_Load(self)</OnLoad>
             <OnEvent>Dispeller_handleEvent(self, event, ...)</OnEvent>
