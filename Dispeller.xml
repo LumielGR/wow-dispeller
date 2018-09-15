@@ -3,9 +3,9 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
     <Script file="Dispeller.lua"/>
     <Script file="Dispeller_utils.lua"/>
-    <Frame name="Dispeller" parent="UIParent" toplevel="true" enableMouse="true" movable="true" frameStrata="HIGH">
+    <Frame name="Dispeller" parent="UIParent" clampedToScreen="true" toplevel="true" enableMouse="true" movable="true" frameStrata="HIGH">
         <Size>
-            <AbsDimension x="220" y="80" />
+            <AbsDimension x="220" y="20" />
         </Size>
         <Anchors>
             <Anchor point="CENTER" />
@@ -18,7 +18,7 @@
             <Frame name="$parentTitle">
                 <Size x="220" y="10"/>
                 <Anchors>
-                    <Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="0"/></Offset></Anchor>
+                    <Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="10"/></Offset></Anchor>
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
@@ -26,14 +26,14 @@
                             <Size><AbsDimension x="250" y="64"/></Size>
                             <Anchors>
                                 <Anchor point="TOP">
-                                    <Offset><AbsDimension x="0" y="12"/></Offset>
+                                    <Offset><AbsDimension x="0" y="0"/></Offset>
                                 </Anchor>
                             </Anchors>
                         </Texture>
                         <FontString parentKey="Text" font="Fonts\FRIZQT__.TTF">
                             <Anchors>
                                 <Anchor point="CENTER">
-                                    <Offset><AbsDimension x="0" y="-5"/></Offset>
+                                    <Offset><AbsDimension x="0" y="-15"/></Offset>
                                 </Anchor>
                             </Anchors>
                             <FontHeight><AbsValue val="12"/></FontHeight>
@@ -42,45 +42,58 @@
                 </Layers>
             </Frame>
             <Frame name="$parentBuffs">
-                <Size x="150" y="80"/>
+                <Size x="220" y="80"/>
                 <Anchors>
-                    <Anchor point="TOP"><Offset><AbsDimension x="0" y="-22"/></Offset></Anchor>
-                    <Anchor point="CENTER"/>
+                    <Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="-12"/></Offset></Anchor>
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
+                        <Texture>
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="25" y="-25"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                            <Gradient>
+                                <MinColor r="1" g="0" b="0" a="0.1"/>
+                                <MaxColor r="1" g="0" b="0" a="1.0"/>
+                            </Gradient>
+                            <!--<Color r="1" g="0" b="0" a="0.5"/>-->
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
                         <FontString parentKey="Text" font="Fonts\FRIZQT__.TTF" justifyH="LEFT">
                             <Anchors>
-                                <Anchor point="TOPLEFT"/>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="25" y="-25"/></Offset>
+                                </Anchor>
                                 <Anchor point="BOTTOMRIGHT"/>
                             </Anchors>
                             <FontHeight><AbsValue val="12"/></FontHeight>
                         </FontString>
                     </Layer>
                 </Layers>
-                <!--<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" tile="true">-->
-                    <!--<Color r="0" g="1" b="1" a="1.0"/>-->
-                    <!--<BorderColor r="0" g="0" b="0" />-->
-                <!--</Backdrop>-->
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                          edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <BackgroundInsets>
+                        <!--<AbsInset left="11" right="12" top="12" bottom="11"/>-->
+                        <AbsInset left="0" right="220" top="12" bottom="11"/>
+                    </BackgroundInsets>
+                    <TileSize>
+                        <AbsValue val="32"/>
+                    </TileSize>
+                    <EdgeSize>
+                        <AbsValue val="32"/>
+                    </EdgeSize>
+                </Backdrop>
             </Frame>
         </Frames>
         <!--<Backdrop>-->
             <!--<Color r="0" g="1" b="1" a="1.0" />-->
         <!--</Backdrop>-->
-        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
-                edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-            <BackgroundInsets>
-                <AbsInset left="11" right="12" top="12" bottom="11"/>
-            </BackgroundInsets>
-            <TileSize>
-                <AbsValue val="32"/>
-            </TileSize>
-            <EdgeSize>
-                <AbsValue val="32"/>
-            </EdgeSize>
-        </Backdrop>
+        <!---->
         <Scripts>
-            <OnLoad>Dispeller(self)</OnLoad>
+            <OnLoad>Dispeller_Load(self)</OnLoad>
             <OnEvent>Dispeller_handleEvent(self, event, ...)</OnEvent>
             <OnMouseDown>Dispeller_mouseDown(self, button)</OnMouseDown>
             <OnMouseUp>Dispeller_mouseUp(self, button)</OnMouseUp>
