@@ -7,7 +7,6 @@ local version = GetAddOnMetadata("Dispeller", "Version")
 DispellerFrame = nil
 
 function Dispeller_Load(self)
-    print("Loaded: " .. version)
     local _, playerClass = UnitClass("player")
 
     DispellerFrame = self
