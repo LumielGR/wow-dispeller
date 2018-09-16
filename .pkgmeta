@@ -1,1 +1,4 @@
 package-as: Dispeller
+license-output: LICENSE.md
+ignore:
+  - README.md
