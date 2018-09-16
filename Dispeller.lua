@@ -91,10 +91,7 @@ function Dispeller_mouseUp(self, button)
     if (self.Locked == false) then
         self:StopMovingOrSizing()
         self.IsMoving = false
-        DispellerSettings.positionX = self:GetLeft()
-        DispellerSettings.positionY = self:GetBottom()
         logdebug("Dispeller Position X: " .. self:GetLeft() .. " Y: " .. self:GetBottom())
-        logdebug("Global Position X: " .. DispellerSettings.positionX .. " Y: " .. DispellerSettings.positionY)
     end
 end
 

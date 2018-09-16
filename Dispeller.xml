@@ -30,7 +30,7 @@
                                 </Anchor>
                             </Anchors>
                         </Texture>
-                        <FontString parentKey="Text" font="Fonts\FRIZQT__.TTF">
+                        <FontString parentKey="Text" inherits="GameFontWhite">
                             <Anchors>
                                 <Anchor point="CENTER">
                                     <Offset><AbsDimension x="0" y="-15"/></Offset>
@@ -48,7 +48,7 @@
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <FontString parentKey="Text" font="Fonts\FRIZQT__.TTF" justifyH="LEFT">
+                        <FontString parentKey="Text" inherits="GameFontWhite" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="TOPLEFT">
                                     <Offset><AbsDimension x="25" y="-5"/></Offset>
