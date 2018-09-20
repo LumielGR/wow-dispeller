@@ -14,8 +14,26 @@ local combatLogEventTableInverse = {
     "DAMAGE_SHIELD","DAMAGE_SPLIT","DAMAGE_SHIELD_MISSED","ENCHANT_APPLIED","ENCHANT_REMOVED","PARTY_KILL","UNIT_DIED","UNIT_DESTROYED","UNIT_DISSIPATES",
     "SPELL_ABSORBED"
 }
-
 local combatLogEventTable = {}
+
+-- Spell names are irrelevant --
+local dispelExclusions = {
+    PRIEST = {
+
+    },
+    MAGE = {
+        [642] = "Divine Shield"
+    },
+    SHAMAN = {
+
+    },
+    WARLOCK = {
+
+    },
+    WARRIOR = {
+
+    }
+}
 
 function Dispeller_Load(self)
 
@@ -38,12 +56,13 @@ function Dispeller_handleEvent(self, event, ...)
     if (event == "ADDON_LOADED") then
         if (args[1] == "Dispeller") then
             combatLogEventTable = Dispeller_InverseTable(combatLogEventTableInverse)
-            Dispeller_SetPlayer()
+            Dispeller_InitCommonVariables()
             -- Todo: Future global options
             if (type(DispellerSettings) ~= "table") then
                 DispellerSettings =  { }
             end
             DispellerSettings.Debug = false
+            DispellerSettings.Test = false
         end
     elseif (event == "PLAYER_TARGET_CHANGED")  then
         Dispeller_Update()
@@ -52,22 +71,25 @@ function Dispeller_handleEvent(self, event, ...)
     elseif (event == "PLAYER_DEAD") then
         Dispeller_Update()
     elseif (event == "UNIT_AURA") then
-        if (args[1] ~= "target" and DispellerSettings.Debug == false) then do return end end
-        Dispeller_LogDebug(event .. " on " .. args[1])
+        --Dispeller_LogDebug(event .. " on " .. args[1])
+        if (args[1] ~= "target" and DispellerSettings.Test == false) then do return end end
         Dispeller_Update()
     elseif (event == "COMBAT_LOG_EVENT_UNFILTERED") then
         local timestamp, logEvent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags,
-            spellId, spellName, spellSchool, spellId, extraSpellId, extraSpellName, extraSchool, auraType = CombatLogGetCurrentEventInfo()
+            spellId, spellName, spellSchool, param15, param16, param17, param18, param19 = CombatLogGetCurrentEventInfo()
 
         if (not(Dispeller_ValueExists(combatLogEventTable, logEvent))) then
             Dispeller_LogError("Event missing: " .. logEvent)
-        elseif (event == "SPELL_STOLEN" and sourceGUID == UnitGUID("player")) then
-            Dispeller_LogInfo("Stole: " .. GetSpellLink(spellId) .. " from " .. destName)
-        elseif (event == "SPELL_DISPEL" and sourceGUID == UnitGUID("player")) then
-            Dispeller_LogInfo("Dispelled: " .. GetSpellLink(spellId) .. " from " .. destName)
-        elseif (event == "SPELL_DISPEL_FAILED" and sourceGUID == UnitGUID("player")) then
-            Dispeller_LogInfo("Failed to dispell: " .. GetSpellLink(spellId) .. " from " .. destName)
+        elseif (logEvent == "SPELL_STOLEN" and sourceGUID == Dispeller_Common.player.id) then
+            Dispeller_LogInfo("Stole: " .. GetSpellLink(param15) .. " from " .. destName)
+        elseif (logEvent == "SPELL_DISPEL" and sourceGUID == Dispeller_Common.player.id) then
+            Dispeller_LogInfo("Dispelled: " .. GetSpellLink(param15) .. " from " .. destName)
+        elseif (logEvent == "SPELL_DISPEL_FAILED" and sourceGUID == Dispeller_Common.player.id) then
+            Dispeller_LogInfo("Failed to dispell: " .. GetSpellLink(param15) .. " from " .. destName)
+        elseif (Dispeller_Common.player.playerClass == "MAGE" and logEvent == "SPELL_MISSED" and sourceGUID == Dispeller_Common.player.id) then
+            Dispeller_LogInfo("SPELL Missed: " .. "missType: " .. tostring(param15) .. " isOffhand: " .. tostring(param16) .. " amount: " .. tostring(param17) .. " from " .. destName)
         else
+            ChatFrame3:AddMessage(logEvent .. " : " .. tostring(sourceName) .. " : " .. tostring(destName) .. " : " .. tostring(spellName))
             --Dispeller_LogInfo(event .. " : " .. sourceName .. " : " .. destName .. " : " .. spellName)
         end
     end
@@ -76,20 +98,23 @@ end
 function Dispeller_Update()
     local stealable = {}
     for i = 1,40 do
-        local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge = UnitAura("target", i, "HELPFUL")
+        local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId = UnitAura("target", i, "HELPFUL")
         if (name == nil) then break else
             if (canStealOrPurge) then
-                table.insert(stealable, name)
-                Dispeller_LogDebug(name .. " stealable: " .. tostring(canStealOrPurge))
+                if (Dispeller_Common.player.playerClass == "MAGE" and dispelExclusions.MAGE[spellId] ~= nil) then
+                    -- do nothing
+                else
+                    table.insert(stealable, name)
+                end
             end
         end
     end
-    if (DispellerSettings.Debug) then
+    if (DispellerSettings.Test) then
         stealable = {"Buff1", "Buff2", "Buff3", "Buff4", "Buff5", "Buff6", "Buff7", "Buff8", "Buff9" }
     end
 
     if (#stealable < 1) then
-        if not DispellerSettings.Debug then
+        if not DispellerSettings.Test then
             DispellerFrame:Hide()
         end
     else
@@ -128,6 +153,12 @@ function Dispeller_cmdHandle(command, ...)
         DispellerSettings.Debug = not DispellerSettings.Debug
         Dispeller_LogInfo("Debug: " .. tostring(DispellerSettings.Debug))
         if (DispellerSettings.Debug) then
+            ChatFrame3:AddMessage("ChatFrame3 initialized")
+        end
+    elseif (command == "test") then
+        DispellerSettings.Test = not DispellerSettings.Test
+        Dispeller_LogInfo("Test: " .. tostring(DispellerSettings.Test))
+        if (DispellerSettings.Test) then
             DispellerBuffs.Text:SetText("")
         end
     end
