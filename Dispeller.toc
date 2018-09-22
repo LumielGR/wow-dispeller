@@ -2,6 +2,7 @@
 ## Title: Dispeller
 ## Author: Sofianos (Magtheridon-EU)
 ## Version: 0.5.1
+## X-Source: http://github.com/lumielgr/wow-dispeller
 ## SavedVariables: DispellerSettings
 
 Dispeller.xml

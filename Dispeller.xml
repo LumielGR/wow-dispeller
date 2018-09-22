@@ -4,6 +4,7 @@
     <Script file="Dispeller.lua"/>
     <Script file="Dispeller_common.lua"/>
     <Script file="Dispeller_utils.lua"/>
+    <Include file="Dispeller_Options.xml"/>
     <Frame name="Dispeller" parent="UIParent" clampedToScreen="true" toplevel="true" enableMouse="true" movable="true" frameStrata="HIGH">
         <Size>
             <AbsDimension x="220" y="20" />
