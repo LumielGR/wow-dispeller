@@ -1,7 +1,7 @@
-## Interface: 80000
+## Interface: 80100
 ## Title: Dispeller
 ## Author: Sofianos (Magtheridon-EU)
-## Version: 0.5.1
+## Version: 0.5.2
 ## X-Source: http://github.com/lumielgr/wow-dispeller
 ## SavedVariables: DispellerSettings
 
