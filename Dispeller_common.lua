@@ -7,20 +7,25 @@ Dispeller_Common = {}
 -- Experimental --
 function Dispeller_InitCommonVariables()
     local player = {}
-    player.localClass, player.playerClass, player.classId = UnitClass("player")
-    Dispeller_Common.player = player
-    Dispeller_Common.player.id = UnitGUID("player")
-    local _, _, raceName, _, gender, name, realm = GetPlayerInfoByGUID(Dispeller_Common.player.id)
-    Dispeller_Common.player.race = raceName
+    player.localClass, player.playerClass = UnitClass("player")
+    player.id = UnitGUID("player")
+    local localizedClass, englishClass, localizedRace, englishRace, gender, name, realm = GetPlayerInfoByGUID(player.id)
+    player.realm = realm
+    player.race = englishRace
     if (gender == 2) then
-        Dispeller_Common.player.gender = "male"
+        player.gender = "male"
     elseif (gender == 3) then
-        Dispeller_Common.player.gender = "female"
+        player.gender = "female"
     else
-        Dispeller_Common.player.gender = "unknown"
+        player.gender = "unknown"
     end
-
-    Dispeller_Common.player.realm = realm
+    Dispeller_Common.player = player
+    local broken_classes = Dispeller_InverseTable({
+        "PRIEST", "WARRIOR", "SHAMAN", "HUNTER"
+    })
+    if (Dispeller_ValueExists(broken_classes, Dispeller_Common.player.playerClass)) then
+        Dispeller_Common.broken = true
+    end
 end
 
 function Dispeller_ValueExists(table, value)
@@ -34,3 +39,11 @@ function Dispeller_InverseTable(table)
     end
     return inverseTable
 end
+
+Dispeller_CommandList = {
+    [1] = "---Dispeller command list---",
+    [2] = "/dispeller show - Hides or shows the dispeller frame.",
+    [3] = "/dispeller debug - Enables Dispeller debug mode",
+    [4] = "/dispeller test - Shows a demo Dispeller frame",
+    [5] = "/dispeller reset - Resets Dispeller to default configuration"
+}
