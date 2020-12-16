@@ -52,6 +52,7 @@ function Dispeller_Load(self)
     self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("UNIT_AURA")
     self:RegisterEvent("PLAYER_DEAD")
+    self:RegisterEvent("PLAYER_LOGIN")
     self:RegisterEvent("UNIT_TARGET")
     self:RegisterEvent("PLAYER_TARGET_CHANGED")
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -67,9 +68,6 @@ end
 function Dispeller_handleEvent(self, event, ...)
     local args = { ... }
     --Dispeller_LogDebug(event .. " on " .. args[1])
-    if (Dispeller_Common.loaded and Dispeller_Common.player == nil) then
-        Dispeller_InitCommonVariables()
-    end
     if (event == "ADDON_LOADED" and args[1] == "Dispeller") then
         if DispellerSettings == nil then
             DispellerSettings = {
@@ -80,6 +78,8 @@ function Dispeller_handleEvent(self, event, ...)
         DispellerSettings.Test = false
         combatLogEventTable = Dispeller_InverseTable(combatLogEventTableInverse)
         Dispeller_Common.loaded = true
+    elseif (event == "PLAYER_LOGIN") then
+        Dispeller_InitCommonVariables()
     elseif (event == "PLAYER_TARGET_CHANGED") then
         Dispeller_LogDebug(event)
         Dispeller_Update(args[1])
